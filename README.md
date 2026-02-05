@@ -146,13 +146,13 @@ INSERT INTO Cliente (Nome_Completo, CPF, Email, Telefone) VALUES
 ('Rebeca Santana Nogueira', '37941111092', 'rebeca.nogueira@gmail.com', '81992340121'),
 ('Gabriel Silva Menezes', '11138161184', 'gabriel.menezes@outlook.com', '81993450232'),
 ('Arthur Henrique Costa', '11268451177', 'arthurhcosta@gmail.com', '81994560343');
--- [Adicione aqui os demais 27 clientes do seu script original]
+
 
 INSERT INTO Veiculo (Placa, Marca, Modelo, Ano, ID_Cliente) VALUES
 ('KHP3A21','Fiat','Palio',2012,1),
 ('PEZ7421','Volkswagen','Gol',2010,2),
 ('QYA8B44','Chevrolet','Onix',2019,3);
--- [Adicione aqui os demais 27 veículos do seu script original]
+
 
 INSERT INTO Peca (Nome_Peca, Descricao, Preco_Unit) VALUES
 ('Óleo Sintético 5W30', 'Lubrificante de alta performance - Galão 1L', 68.90),
