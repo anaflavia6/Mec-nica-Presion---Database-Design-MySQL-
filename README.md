@@ -56,9 +56,14 @@ Estados possíveis do processo:
 - **Collation:** `utf8_general_ci`  
 - **Engine:** InnoDB  
 
+
 ---
 
 ## Physical Model — Database Creation
+
+<img width="580" height="366" alt="image" src="https://github.com/user-attachments/assets/c5b03ec4-3314-4553-a224-0e5143ee38f4" />
+<img width="445" height="426" alt="image" src="https://github.com/user-attachments/assets/17802f78-d05c-4db2-bdf9-7abfb35ef3e5" />
+
 
 ```sql
 CREATE DATABASE IF NOT EXISTS mecanica_precision
