@@ -13,9 +13,9 @@ Este projeto propõe a construção de um **banco de dados relacional estruturad
 
 ## Project Goal  Technical Objective
 
-Desenvolver o esquema de banco de dados **BD Oficina**, permitindo o rastreio completo do serviço:
+A meta é desenvolver o esquema de banco de dados **BD Oficina**, permitindo o rastreio completo do serviço:
 
-O modelo garante integridade referencial, separação de responsabilidades e controle financeiro detalhado.
+O modelo tem como meta integridade referencial, separação de responsabilidades e controle financeiro detalhado.
 
 ---
 
@@ -32,13 +32,13 @@ O modelo garante integridade referencial, separação de responsabilidades e con
 
 ---
 
-## Workflow Control  Ordem de Serviço
+## Ordem de Serviço
 
-A tabela `Ordem_de_Servico` representa o **núcleo operacional do sistema**.
+A tabela `Ordem_de_Servico` representa o **núcleo de funcionamento do sistema**.
 
 Estados possíveis do processo:
 
-> **Key Insight:** O uso de `ENUM` impede estados inválidos e mantém consistência no fluxo de trabalho.
+> **Key Insight:** O uso de `ENUM` impede estados inválidos e garante estabilidade no fluxo de trabalho.
 
 ---
 
