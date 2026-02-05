@@ -1,14 +1,14 @@
-# Mecanica-Presion---Database-Design-MySQL-
+# Mecanica Presion - Database Design (MySQL)
 Projeto de modelagem e implementação de banco de dados relacional em MySQL para uma oficina mecânica.
 
 
-# SQL — Database Design: Mecânica Precision
+# SQL Database Design: Mecânica Precision
 
 Referência técnica de **modelagem e implementação de banco de dados relacional** em MySQL, construída a partir de um cenário real de oficina mecânica em expansão.
 
 ---
 
-## Project Overview — Business Context
+## Project Overview  Business Context
 
 A Mecânica Precision realizava o controle de clientes, veículos e serviços de forma manual, o que resultava em perda de informações técnicas, baixa rastreabilidade e falhas no controle financeiro.
 
@@ -16,7 +16,7 @@ Este projeto propõe a construção de um **banco de dados relacional estruturad
 
 ---
 
-## Project Goal — Technical Objective
+## Project Goal  Technical Objective
 
 Desenvolver o esquema de banco de dados **BD Oficina**, permitindo o rastreio completo do serviço:
 
@@ -24,7 +24,7 @@ O modelo garante integridade referencial, separação de responsabilidades e con
 
 ---
 
-## Business Rules — Core Constraints
+## Business Rules Core Constraints
 
 |Regra de Negócio|Implementação no Modelo|
 |---|---|
@@ -37,7 +37,7 @@ O modelo garante integridade referencial, separação de responsabilidades e con
 
 ---
 
-## Workflow Control — Ordem de Serviço
+## Workflow Control  Ordem de Serviço
 
 A tabela `Ordem_de_Servico` representa o **núcleo operacional do sistema**.
 
@@ -47,7 +47,7 @@ Estados possíveis do processo:
 
 ---
 
-## Database Environment — Technical Requirements
+## Database Environment  Technical Requirements
 
 - **SGBD:** MySQL 8.0  
 - **Ferramenta:** MySQL Workbench  
@@ -59,7 +59,7 @@ Estados possíveis do processo:
 
 ---
 
-## Physical Model — Database Creation
+## Physical Model  Database Creation
 
 <img width="580" height="366" alt="image" src="https://github.com/user-attachments/assets/c5b03ec4-3314-4553-a224-0e5143ee38f4" />
 <img width="445" height="426" alt="image" src="https://github.com/user-attachments/assets/17802f78-d05c-4db2-bdf9-7abfb35ef3e5" />
@@ -135,14 +135,14 @@ CREATE TABLE Laudo (
 
 
 
-Data Validation — Test Load (DML)
+Data Validation  Test Load (DML)
 Para validação do modelo, foi realizada uma carga de testes contendo:
 30 clientes
 30 veículos
 30 ordens de serviço
 4 mecânicos
 A carga valida integridade referencial, fluxo de status e comportamento do modelo em cenário real.
-Glossary — Technical Terms
+Glossary  Technical Terms
 ENUM: Tipo de dado controlado para padronização de estados
 Referential Integrity: Garantia de consistência entre tabelas
 Operational Core: Entidade central do fluxo de dados
