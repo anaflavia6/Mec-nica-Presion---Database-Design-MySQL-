@@ -61,15 +61,15 @@ Estados possíveis do processo:
 
 
 ```sql
--- 1. CONFIGURAÇÃO DO AMBIENTE
+-- 
 CREATE DATABASE IF NOT EXISTS mecanica_precision
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 USE mecanica_precision;
 
--- 2. CRIAÇÃO DAS TABELAS (DDL)
--- Note: Estrutura profissional com InnoDB para garantir integridade referencial.
+--  CRIAÇÃO DAS TABELAS (DDL)
+
 
 CREATE TABLE Cliente (
     ID_Cliente INT AUTO_INCREMENT PRIMARY KEY,
@@ -173,10 +173,7 @@ INSERT INTO Ordem_Peca (ID_Ordem, ID_Peca, Quantidade, Valor_Total) VALUES
 (3, 3, 1, 185.50), -- 1 Kit Pastilha na OS 3
 (3, 4, 2, 480.00); -- 2 Discos de Freio na OS 3
 
--- 4. CONSULTAS DE BUSINESS INTELLIGENCE (BI)
--- Estas queries respondem a perguntas estratégicas do negócio.
 
--- A) Ranking de Peças: Qual produto gera mais receita?
 SELECT 
     p.Nome_Peca, 
     SUM(op.Quantidade) AS Unidades_Vendidas,
@@ -186,7 +183,7 @@ JOIN Ordem_Peca op ON p.ID_Peca = op.ID_Peca
 GROUP BY p.ID_Peca
 ORDER BY Receita_Total DESC;
 
--- B) Visão Geral por OS: Ticket Médio de Peças
+
 SELECT 
     ID_Ordem, 
     SUM(Quantidade) AS Total_Itens,
@@ -194,7 +191,7 @@ SELECT
 FROM Ordem_Peca
 GROUP BY ID_Ordem;
 
--- C) Relatório de Clientes e seus Veículos (JOIN completo)
+
 SELECT c.Nome_Completo, v.Modelo, v.Placa
 FROM Cliente c
 JOIN Veiculo v ON c.ID_Cliente = v.ID_Cliente;
