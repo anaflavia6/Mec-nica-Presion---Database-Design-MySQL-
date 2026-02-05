@@ -1,11 +1,6 @@
 # Mecanica Presion - Database Design (MySQL)
 Projeto de modelagem e implementação de banco de dados relacional em MySQL para uma oficina mecânica.
 
-
-# SQL Database Design: Mecânica Precision
-
-Referência técnica de **modelagem e implementação de banco de dados relacional** em MySQL, construída a partir de um cenário real de oficina mecânica em expansão.
-
 ---
 
 ## Project Overview  Business Context
@@ -66,12 +61,15 @@ Estados possíveis do processo:
 
 
 ```sql
+-- 1. CONFIGURAÇÃO DO AMBIENTE
 CREATE DATABASE IF NOT EXISTS mecanica_precision
 CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
 USE mecanica_precision;
 
+-- 2. CRIAÇÃO DAS TABELAS (DDL)
+-- Note: Estrutura profissional com InnoDB para garantir integridade referencial.
 
 CREATE TABLE Cliente (
     ID_Cliente INT AUTO_INCREMENT PRIMARY KEY,
@@ -82,7 +80,6 @@ CREATE TABLE Cliente (
     Data_Cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-
 CREATE TABLE Veiculo (
     ID_Veiculo INT AUTO_INCREMENT PRIMARY KEY,
     Placa CHAR(7) NOT NULL UNIQUE,
@@ -90,10 +87,8 @@ CREATE TABLE Veiculo (
     Modelo VARCHAR(50) NOT NULL,
     Ano INT,
     ID_Cliente INT NOT NULL,
-    FOREIGN KEY (ID_Cliente)
-        REFERENCES Cliente(ID_Cliente)
+    FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_Cliente)
 ) ENGINE=InnoDB;
-
 
 CREATE TABLE Mecanico (
     ID_Mecanico INT AUTO_INCREMENT PRIMARY KEY,
@@ -101,26 +96,35 @@ CREATE TABLE Mecanico (
     Especialidade VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB;
 
+CREATE TABLE Peca (
+    ID_Peca INT AUTO_INCREMENT PRIMARY KEY,
+    Nome_Peca VARCHAR(100) NOT NULL,
+    Descricao MEDIUMTEXT,
+    Preco_Unit DECIMAL(10,2) NOT NULL
+) ENGINE=InnoDB;
 
 CREATE TABLE Ordem_de_Servico (
     ID_Ordem INT AUTO_INCREMENT PRIMARY KEY,
     ID_Veiculo INT NOT NULL,
     ID_Mecanico INT NOT NULL,
-    processo ENUM(
-        'Agendado',
-        'Em_analise',
-        'Aguardando_pecas',
-        'Finalizado',
-        'Cancelado'
-    ) NOT NULL DEFAULT 'Agendado',
+    processo ENUM('Agendado', 'Em_analise', 'Aguardando_pecas', 'Finalizado', 'Cancelado') NOT NULL DEFAULT 'Agendado',
     Valor_Pecas DECIMAL(10,2) DEFAULT 0.00,
-    Valor_Mao_Obra DECIMAL(10,2) DEFAULT 0.00 NOT NULL,
+    Valor_Mao_Obra DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     Data_Abertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Data_Fechamento TIMESTAMP NULL,
     FOREIGN KEY (ID_Veiculo) REFERENCES Veiculo(ID_Veiculo),
     FOREIGN KEY (ID_Mecanico) REFERENCES Mecanico(ID_Mecanico)
 ) ENGINE=InnoDB;
 
+CREATE TABLE Ordem_Peca (
+    ID_Ordem INT NOT NULL,
+    ID_Peca INT NOT NULL,
+    Quantidade INT NOT NULL,
+    Valor_Total DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (ID_Ordem, ID_Peca),
+    FOREIGN KEY (ID_Ordem) REFERENCES Ordem_de_Servico(ID_Ordem),
+    FOREIGN KEY (ID_Peca) REFERENCES Peca(ID_Peca)
+) ENGINE=InnoDB;
 
 CREATE TABLE Laudo (
     ID_Laudo INT AUTO_INCREMENT PRIMARY KEY,
@@ -128,12 +132,74 @@ CREATE TABLE Laudo (
     Diagnostico MEDIUMTEXT NOT NULL,
     Procedimento MEDIUMTEXT NOT NULL,
     Data_Registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Ordem)
-        REFERENCES Ordem_de_Servico(ID_Ordem)
-        ON DELETE CASCADE
+    FOREIGN KEY (ID_Ordem) REFERENCES Ordem_de_Servico(ID_Ordem) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- 3. INSERÇÃO DE DADOS (DML) - CENÁRIOS REAIS
+-- Aviso: Dados fictícios para fins de teste.
 
+INSERT INTO Mecanico (Nome, Especialidade) VALUES
+('João Silva','Motor'), ('Carlos Lima','Suspensão'),
+('Ana Souza','Elétrica'), ('Pedro Rocha','Freios');
+
+INSERT INTO Cliente (Nome_Completo, CPF, Email, Telefone) VALUES
+('Rebeca Santana Nogueira', '37941111092', 'rebeca.nogueira@gmail.com', '81992340121'),
+('Gabriel Silva Menezes', '11138161184', 'gabriel.menezes@outlook.com', '81993450232'),
+('Arthur Henrique Costa', '11268451177', 'arthurhcosta@gmail.com', '81994560343');
+-- [Adicione aqui os demais 27 clientes do seu script original]
+
+INSERT INTO Veiculo (Placa, Marca, Modelo, Ano, ID_Cliente) VALUES
+('KHP3A21','Fiat','Palio',2012,1),
+('PEZ7421','Volkswagen','Gol',2010,2),
+('QYA8B44','Chevrolet','Onix',2019,3);
+-- [Adicione aqui os demais 27 veículos do seu script original]
+
+INSERT INTO Peca (Nome_Peca, Descricao, Preco_Unit) VALUES
+('Óleo Sintético 5W30', 'Lubrificante de alta performance - Galão 1L', 68.90),
+('Filtro de Óleo Sedan', 'Filtro de óleo blindado original', 42.00),
+('Kit Pastilha de Freio', 'Par de pastilhas dianteiras cerâmica', 185.50),
+('Disco de Freio Ventilado', 'Disco de freio dianteiro (unidade)', 240.00),
+('Bateria 60Ah', 'Bateria selada livre de manutenção', 480.00);
+
+INSERT INTO Ordem_de_Servico (ID_Veiculo, ID_Mecanico, processo, Valor_Pecas, Valor_Mao_Obra) VALUES
+(1, 1, 'Finalizado', 317.60, 150.00),
+(2, 2, 'Em_analise', 0.00, 0.00),
+(3, 4, 'Finalizado', 665.50, 250.00);
+
+-- Validação N:M: Ligando peças às Ordens de Serviço
+INSERT INTO Ordem_Peca (ID_Ordem, ID_Peca, Quantidade, Valor_Total) VALUES
+(1, 1, 4, 275.60), -- 4L de Óleo na OS 1
+(1, 2, 1, 42.00),   -- 1 Filtro na OS 1
+(3, 3, 1, 185.50), -- 1 Kit Pastilha na OS 3
+(3, 4, 2, 480.00); -- 2 Discos de Freio na OS 3
+
+-- 4. CONSULTAS DE BUSINESS INTELLIGENCE (BI)
+-- Estas queries respondem a perguntas estratégicas do negócio.
+
+-- A) Ranking de Peças: Qual produto gera mais receita?
+SELECT 
+    p.Nome_Peca, 
+    SUM(op.Quantidade) AS Unidades_Vendidas,
+    SUM(op.Valor_Total) AS Receita_Total
+FROM Peca p
+JOIN Ordem_Peca op ON p.ID_Peca = op.ID_Peca
+GROUP BY p.ID_Peca
+ORDER BY Receita_Total DESC;
+
+-- B) Visão Geral por OS: Ticket Médio de Peças
+SELECT 
+    ID_Ordem, 
+    SUM(Quantidade) AS Total_Itens,
+    ROUND(SUM(Valor_Total), 2) AS Valor_Total_Pecas
+FROM Ordem_Peca
+GROUP BY ID_Ordem;
+
+-- C) Relatório de Clientes e seus Veículos (JOIN completo)
+SELECT c.Nome_Completo, v.Modelo, v.Placa
+FROM Cliente c
+JOIN Veiculo v ON c.ID_Cliente = v.ID_Cliente;
+
+---
 
 Data Validation  Test Load (DML)
 Para validação do modelo, foi realizada uma carga de testes contendo:
